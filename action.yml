@@ -5,20 +5,20 @@ inputs:
     description: Terraform version to be used in deployment
     required: true
   account_setup_directory:
-    description: Directory path where terraform files are present.
+    description: Directory path where terraform files are present
     required: true
   environment:
-    description: Deployment environment.
+    description: Deployment environment
     required: true
   tf_vars_file:
     description: File containing terraform variable values
     required: true
   config_file:
-    description: Name of the backend config file.
+    description: Name of the backend config file
     required: false
     default: "backend-config.hcl"
-  action_to_performed:
-    description: Perform plan or apply.
+  action_to_perform:
+    description: Perform plan or apply
     required: false
     default: "apply"
   terraform_parallelism:
@@ -43,11 +43,11 @@ runs:
         else
           terraform workspace new "${{ inputs.environment }}"
         fi
-        if [ "${{ inputs.action_to_performed }}" = "apply" ]; then
+        if [ "${{ inputs.action_to_perform }}" = "apply" ]; then
           terraform apply -auto-approve --var-file="${{ inputs.tf_vars_file }}" -parallelism="${{ inputs.terraform_parallelism }}" -lock=true
-        elif [ "${{ inputs.action_to_performed }}" = "plan" ]; then
+        elif [ "${{ inputs.action_to_perform }}" = "plan" ]; then
           terraform plan --var-file="${{ inputs.tf_vars_file }}" -parallelism="${{ inputs.terraform_parallelism }}" -lock=true
         else
-          echo "Invalid action ${{ inputs.action_to_performed }}"
+          echo "Invalid action ${{ inputs.action_to_perform }}"
           exit 1
         fi
